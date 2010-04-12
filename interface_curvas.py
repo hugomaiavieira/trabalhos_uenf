@@ -9,9 +9,9 @@ from   OpenGL.GLU import *
 from   OpenGL.GLUT import *
 
 from numpy import array
-from curvas import Hermite, Bezier
+from curvas import Hermite, Bezier, Splines, Catmull
 
-LIMPAR, DESENHAR_HERMITE, MANIPULAR_HERMITE, DESENHAR_BEZIER, MANIPULAR_BEZIER = range(5)
+LIMPAR, DESENHAR_HERMITE, MANIPULAR_HERMITE, DESENHAR_BEZIER, MANIPULAR_BEZIER, DESENHAR_SPLINES, MANIPULAR_SPLINES, DESENHAR_CATMULL, MANIPULAR_CATMULL = range(9)
 
 class Interface:
 
@@ -78,24 +78,24 @@ class Interface:
                 elif(state == GLUT_UP):
                     self.elemento_selecionado = None
 
-        elif self.tarefa == DESENHAR_BEZIER:
+        elif (self.tarefa == DESENHAR_BEZIER) or (self.tarefa == DESENHAR_SPLINES) or (self.tarefa == DESENHAR_CATMULL):
             if(button == GLUT_LEFT_BUTTON):
                 if(state == GLUT_DOWN):
-                    self.curva.adicionar_ponto(array([x,y]))
-                    self.curva.desenha()
+                    if len(self.curva.pontos) < 4:
+                        self.curva.adicionar_ponto(array([x,y]))
+                        self.curva.desenha()
             if(button == GLUT_RIGHT_BUTTON):
                 if(state == GLUT_DOWN):
                     self.curva.calcular_pontos_da_curva()
                     self.curva.desenha("curvas")
                     self.tarefa = MANIPULAR_BEZIER
 
-        elif self.tarefa == MANIPULAR_BEZIER:
+        elif (self.tarefa == MANIPULAR_BEZIER) or (self.tarefa == MANIPULAR_SPLINES) or (self.tarefa == MANIPULAR_CATMULL):
             if(button == GLUT_LEFT_BUTTON):
                 if(state == GLUT_DOWN):
                     self.elemento_selecionado = self.curva.ponto_proximo(x,y)
                 elif(state == GLUT_UP):
                     self.elemento_selecionado = None
-
 
     def gerencia_motion(self, x, y):
         # As duas linhas seguintes servem para ajeitar as coordenadas recebidas
@@ -117,7 +117,7 @@ class Interface:
                     self.curva.desenha("curvas")
             glutPostRedisplay()
 
-        elif self.tarefa == MANIPULAR_BEZIER:
+        elif (self.tarefa == MANIPULAR_BEZIER) or (self.tarefa == MANIPULAR_SPLINES) or (self.tarefa == MANIPULAR_CATMULL):
             if self.elemento_selecionado != None:
                 self.curva.mover_ponto(self.elemento_selecionado, x, y)
                 self.curva.desenha("curvas")
@@ -132,6 +132,7 @@ class Interface:
 
     def menu_hermite(self, opcao):
         if opcao == DESENHAR_HERMITE:
+            self.curva = Hermite()
             self.tarefa = DESENHAR_HERMITE
         if opcao == MANIPULAR_HERMITE:
             self.tarefa = MANIPULAR_HERMITE
@@ -145,6 +146,22 @@ class Interface:
             self.tarefa = MANIPULAR_BEZIER
         return 0
 
+    def menu_splines(self, opcao):
+        if opcao == DESENHAR_SPLINES:
+            self.curva = Splines()
+            self.tarefa = DESENHAR_SPLINES
+        if opcao == MANIPULAR_SPLINES:
+            self.tarefa = MANIPULAR_SPLINES
+        return 0
+
+    def menu_catmull(self, opcao):
+        if opcao == DESENHAR_CATMULL:
+            self.curva = Catmull()
+            self.tarefa = DESENHAR_CATMULL
+        if opcao == MANIPULAR_CATMULL:
+            self.tarefa = MANIPULAR_CATMULL
+        return 0
+
     def cria_menu(self):
 
         submenu_hermite = glutCreateMenu(self.menu_hermite)
@@ -155,10 +172,20 @@ class Interface:
         glutAddMenuEntry("Manipular", MANIPULAR_BEZIER)
         glutAddMenuEntry("Desenhar", DESENHAR_BEZIER)
 
+        submenu_splines = glutCreateMenu(self.menu_splines)
+        glutAddMenuEntry("Manipular", MANIPULAR_SPLINES)
+        glutAddMenuEntry("Desenhar", DESENHAR_SPLINES)
+
+        submenu_catmull = glutCreateMenu(self.menu_catmull)
+        glutAddMenuEntry("Manipular", MANIPULAR_CATMULL)
+        glutAddMenuEntry("Desenhar", DESENHAR_CATMULL)
+
         menu = glutCreateMenu(self.menu_principal)
         glutAddMenuEntry("Limpar", LIMPAR)
         glutAddSubMenu("Hermite", submenu_hermite)
         glutAddSubMenu("Bezier", submenu_bezier)
+        glutAddSubMenu("Splines", submenu_splines)
+        glutAddSubMenu("Catmull-rom", submenu_catmull)
 
         glutAttachMenu(GLUT_MIDDLE_BUTTON)
 
