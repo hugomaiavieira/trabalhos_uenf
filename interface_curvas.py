@@ -1,7 +1,7 @@
+# -*- coding: UTF-8 -*-
 # Autor: Hugo Henriques Maia Vieira
 # Licença: creative commons by-nc-sa
 
-# -*- coding: UTF-8 -*-
 
 from   sys import argv
 from   OpenGL.GL import *
@@ -9,9 +9,9 @@ from   OpenGL.GLU import *
 from   OpenGL.GLUT import *
 
 from numpy import array
-from curvas import Hermite
+from curvas import Hermite, Bezier
 
-LIMPAR, DESENHAR_HERMITE, MANIPULAR_HERMITE = range(3)
+LIMPAR, DESENHAR_HERMITE, MANIPULAR_HERMITE, DESENHAR_BEZIER, MANIPULAR_BEZIER = range(5)
 
 class Interface:
 
@@ -78,6 +78,24 @@ class Interface:
                 elif(state == GLUT_UP):
                     self.elemento_selecionado = None
 
+        elif self.tarefa == DESENHAR_BEZIER:
+            if(button == GLUT_LEFT_BUTTON):
+                if(state == GLUT_DOWN):
+                    self.curva.adicionar_ponto(array([x,y]))
+                    self.curva.desenha()
+            if(button == GLUT_RIGHT_BUTTON):
+                if(state == GLUT_DOWN):
+                    self.curva.calcular_pontos_da_curva()
+                    self.curva.desenha("curvas")
+                    self.tarefa = MANIPULAR_BEZIER
+
+        elif self.tarefa == MANIPULAR_BEZIER:
+            if(button == GLUT_LEFT_BUTTON):
+                if(state == GLUT_DOWN):
+                    self.elemento_selecionado = self.curva.ponto_proximo(x,y)
+                elif(state == GLUT_UP):
+                    self.elemento_selecionado = None
+
 
     def gerencia_motion(self, x, y):
         # As duas linhas seguintes servem para ajeitar as coordenadas recebidas
@@ -99,6 +117,12 @@ class Interface:
                     self.curva.desenha("curvas")
             glutPostRedisplay()
 
+        elif self.tarefa == MANIPULAR_BEZIER:
+            if self.elemento_selecionado != None:
+                self.curva.mover_ponto(self.elemento_selecionado, x, y)
+                self.curva.desenha("curvas")
+            glutPostRedisplay()
+
     def menu_principal(self, opcao):
         if opcao == LIMPAR:
             self.tarefa = None
@@ -113,15 +137,28 @@ class Interface:
             self.tarefa = MANIPULAR_HERMITE
         return 0
 
+    def menu_bezier(self, opcao):
+        if opcao == DESENHAR_BEZIER:
+            self.curva = Bezier()
+            self.tarefa = DESENHAR_BEZIER
+        if opcao == MANIPULAR_BEZIER:
+            self.tarefa = MANIPULAR_BEZIER
+        return 0
+
     def cria_menu(self):
 
         submenu_hermite = glutCreateMenu(self.menu_hermite)
         glutAddMenuEntry("Manipular", MANIPULAR_HERMITE)
         glutAddMenuEntry("Desenhar", DESENHAR_HERMITE)
 
+        submenu_bezier = glutCreateMenu(self.menu_bezier)
+        glutAddMenuEntry("Manipular", MANIPULAR_BEZIER)
+        glutAddMenuEntry("Desenhar", DESENHAR_BEZIER)
+
         menu = glutCreateMenu(self.menu_principal)
         glutAddMenuEntry("Limpar", LIMPAR)
         glutAddSubMenu("Hermite", submenu_hermite)
+        glutAddSubMenu("Bezier", submenu_bezier)
 
         glutAttachMenu(GLUT_MIDDLE_BUTTON)
 

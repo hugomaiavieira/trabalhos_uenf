@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 # Autor: Hugo Henriques Maia Vieira
 # Licença: creative commons by-nc-sa
 
