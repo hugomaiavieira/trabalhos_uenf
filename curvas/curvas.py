@@ -111,8 +111,8 @@ class Hermite(Curva):
             self.pontos[indice+2] = self.pontos[indice+2] - vetor_movimento
 
     def adicionar_tangentes(self):
-        self.pontos.append(self.pontos[0] + array([0,40]))
-        self.pontos.append(self.pontos[1] + array([0,-40]))
+        self.pontos.append(self.pontos[0] + array([0,80]))
+        self.pontos.append(self.pontos[1] + array([0,-80]))
 
     def desenha(self, fase=""):
         # Desenha pontos
