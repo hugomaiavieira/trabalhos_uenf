@@ -9,8 +9,6 @@ from numpy import array, matrix, hypot, transpose
 X = 0
 Y = 1
 
-class Erro(Exception): pass
-
 class Curva:
 
     def __init__(self,pontos=[]):
