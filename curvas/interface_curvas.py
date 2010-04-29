@@ -112,64 +112,36 @@ class Interface:
             self.tarefa = None
             self.curva.limpar()
             glutPostRedisplay()
-        return 0
-
-    def menu_hermite(self, opcao):
         if opcao == DESENHAR_HERMITE:
             self.curva = Hermite()
+            self.curva.limpar()
             self.tarefa = DESENHAR_HERMITE
-        if opcao == MANIPULAR_HERMITE:
-            self.tarefa = MANIPULAR_HERMITE
-        return 0
-
-    def menu_bezier(self, opcao):
+            glutPostRedisplay()
         if opcao == DESENHAR_BEZIER:
             self.curva = Bezier()
+            self.curva.limpar()
             self.tarefa = DESENHAR_BEZIER
-        if opcao == MANIPULAR_BEZIER:
-            self.tarefa = MANIPULAR_BEZIER
-        return 0
-
-    def menu_splines(self, opcao):
+            glutPostRedisplay()
         if opcao == DESENHAR_SPLINES:
             self.curva = Splines()
+            self.curva.limpar()
             self.tarefa = DESENHAR_SPLINES
-        if opcao == MANIPULAR_SPLINES:
-            self.tarefa = MANIPULAR_SPLINES
-        return 0
-
-    def menu_catmull(self, opcao):
+            glutPostRedisplay()
         if opcao == DESENHAR_CATMULL:
             self.curva = Catmull()
+            self.curva.limpar()
             self.tarefa = DESENHAR_CATMULL
-        if opcao == MANIPULAR_CATMULL:
-            self.tarefa = MANIPULAR_CATMULL
+            glutPostRedisplay()
         return 0
 
     def cria_menu(self):
 
-        submenu_hermite = glutCreateMenu(self.menu_hermite)
-        glutAddMenuEntry("Manipular", MANIPULAR_HERMITE)
-        glutAddMenuEntry("Desenhar", DESENHAR_HERMITE)
-
-        submenu_bezier = glutCreateMenu(self.menu_bezier)
-        glutAddMenuEntry("Manipular", MANIPULAR_BEZIER)
-        glutAddMenuEntry("Desenhar", DESENHAR_BEZIER)
-
-        submenu_splines = glutCreateMenu(self.menu_splines)
-        glutAddMenuEntry("Manipular", MANIPULAR_SPLINES)
-        glutAddMenuEntry("Desenhar", DESENHAR_SPLINES)
-
-        submenu_catmull = glutCreateMenu(self.menu_catmull)
-        glutAddMenuEntry("Manipular", MANIPULAR_CATMULL)
-        glutAddMenuEntry("Desenhar", DESENHAR_CATMULL)
-
         menu = glutCreateMenu(self.menu_principal)
         glutAddMenuEntry("Limpar", LIMPAR)
-        glutAddSubMenu("Hermite", submenu_hermite)
-        glutAddSubMenu("Bezier", submenu_bezier)
-        glutAddSubMenu("Splines", submenu_splines)
-        glutAddSubMenu("Catmull-rom", submenu_catmull)
+        glutAddMenuEntry("Hermite", DESENHAR_HERMITE)
+        glutAddMenuEntry("Bezier", DESENHAR_BEZIER)
+        glutAddMenuEntry("Splines", DESENHAR_SPLINES)
+        glutAddMenuEntry("Catmull-rom", DESENHAR_CATMULL)
 
         glutAttachMenu(GLUT_MIDDLE_BUTTON)
 
