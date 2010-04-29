@@ -90,12 +90,26 @@ class Curva:
 
 class Hermite(Curva):
 
+    """ Nessa curva, os dois primeiros pontos são os pontos base e os dois
+    últimos são suas respectivas tangentes."""
+
     def __init__(self, pontos=[]):
         Curva.__init__(self, pontos)
         self.matriz = matrix([[2, -2, 1, 1],
                               [-3, 3, -2, -1],
                               [0, 0, 1, 0],
                               [1, 0, 0, 0]])
+
+    def mover_ponto(self, indice, x, y):
+        vetor_movimento = self.pontos[indice] - array([x,y])
+
+        self.pontos[indice] = array([x,y])
+        self.calcular_pontos_da_curva()
+
+        # Se forem pontos base, mover suas tangentes junto
+        if indice == 0 or indice == 1:
+            self.pontos[indice+2] = self.pontos[indice+2] - vetor_movimento
+
 
     def desenha(self, fase=""):
         # Desenha pontos
