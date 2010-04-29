@@ -11,15 +11,15 @@ from   OpenGL.GLUT import *
 from numpy import array
 from curvas import Hermite, Bezier, Splines, Catmull
 
-LIMPAR, DESENHAR_HERMITE, MANIPULAR_HERMITE, DESENHAR_BEZIER, MANIPULAR_BEZIER, DESENHAR_SPLINES, MANIPULAR_SPLINES, DESENHAR_CATMULL, MANIPULAR_CATMULL = range(9)
+NADA, LIMPAR, DESENHAR_HERMITE, MANIPULAR_HERMITE, DESENHAR_BEZIER, MANIPULAR_BEZIER, DESENHAR_SPLINES, MANIPULAR_SPLINES, DESENHAR_CATMULL, MANIPULAR_CATMULL = range(10)
 
 class Interface:
 
     def __init__(self):
-        self.curva = Hermite()
+        self.curva = None
         self.limite_x = 300
         self.limite_y = 300
-        self.tarefa = DESENHAR_HERMITE
+        self.tarefa = NADA
         self.elemento_selecionado = None
 
     def init(self):
@@ -43,7 +43,7 @@ class Interface:
         gluOrtho2D(-self.limite_x,self.limite_x,-self.limite_y,self.limite_y)
 
         self.plano_cartesiano()
-        self.curva.desenha("curvas")
+        if self.curva : self.curva.desenha("curvas")
         glFlush()
 
     def reshape(self, largura, altura):
@@ -60,25 +60,7 @@ class Interface:
         x = x - self.limite_x
         y = self.limite_y - y
 
-        if self.tarefa == DESENHAR_HERMITE:
-            if(button == GLUT_LEFT_BUTTON):
-                if(state == GLUT_DOWN):
-                    self.curva.adicionar_ponto(array([x,y]))
-                    self.curva.desenha()
-            if(button == GLUT_RIGHT_BUTTON):
-                if(state == GLUT_DOWN):
-                    self.curva.montar_curva()
-                    self.curva.desenha("curvas")
-                    self.tarefa = MANIPULAR_HERMITE
-
-        elif self.tarefa == MANIPULAR_HERMITE:
-            if(button == GLUT_LEFT_BUTTON):
-                if(state == GLUT_DOWN):
-                    self.elemento_selecionado = self.curva.elemento_proximo(x,y)
-                elif(state == GLUT_UP):
-                    self.elemento_selecionado = None
-
-        elif (self.tarefa == DESENHAR_BEZIER) or (self.tarefa == DESENHAR_SPLINES) or (self.tarefa == DESENHAR_CATMULL):
+        if (self.tarefa == DESENHAR_BEZIER) or (self.tarefa == DESENHAR_SPLINES) or (self.tarefa == DESENHAR_CATMULL) or (self.tarefa == DESENHAR_HERMITE):
             if(button == GLUT_LEFT_BUTTON):
                 if(state == GLUT_DOWN):
                     if len(self.curva.pontos) < 4:
@@ -90,7 +72,7 @@ class Interface:
                     self.curva.desenha("curvas")
                     self.tarefa = MANIPULAR_BEZIER
 
-        elif (self.tarefa == MANIPULAR_BEZIER) or (self.tarefa == MANIPULAR_SPLINES) or (self.tarefa == MANIPULAR_CATMULL):
+        elif (self.tarefa == MANIPULAR_BEZIER) or (self.tarefa == MANIPULAR_SPLINES) or (self.tarefa == MANIPULAR_CATMULL) or (self.tarefa == MANIPULAR_HERMITE):
             if(button == GLUT_LEFT_BUTTON):
                 if(state == GLUT_DOWN):
                     self.elemento_selecionado = self.curva.ponto_proximo(x,y)
@@ -105,19 +87,7 @@ class Interface:
         x = x - self.limite_x
         y = self.limite_y - y
 
-        if self.tarefa == MANIPULAR_HERMITE:
-            if self.elemento_selecionado:
-                if "ponto" in self.elemento_selecionado.keys():
-                    indice = self.elemento_selecionado["ponto"]
-                    self.curva.mover_ponto(indice, x, y)
-                    self.curva.desenha("curvas")
-                if "tangente" in self.elemento_selecionado.keys():
-                    indice = self.elemento_selecionado["tangente"]
-                    self.curva.mover_tangente(indice, x, y)
-                    self.curva.desenha("curvas")
-            glutPostRedisplay()
-
-        elif (self.tarefa == MANIPULAR_BEZIER) or (self.tarefa == MANIPULAR_SPLINES) or (self.tarefa == MANIPULAR_CATMULL):
+        if (self.tarefa == MANIPULAR_BEZIER) or (self.tarefa == MANIPULAR_SPLINES) or (self.tarefa == MANIPULAR_CATMULL) or (self.tarefa == MANIPULAR_HERMITE):
             if self.elemento_selecionado != None:
                 self.curva.mover_ponto(self.elemento_selecionado, x, y)
                 self.curva.desenha("curvas")
