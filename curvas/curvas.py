@@ -64,7 +64,6 @@ class Curva:
         for ponto in self.pontos:
             glVertex2f(ponto[X],ponto[Y])
         glEnd()
-        glFlush()
 
         if fase == "curva":
             parametro = GL_LINE_LOOP # Desenha poligono
@@ -77,7 +76,6 @@ class Curva:
         for ponto in self.pontos:
             glVertex2f(ponto[X],ponto[Y])
         glEnd()
-        glFlush()
 
         if fase == "curva":
             # Desenha curvas
@@ -86,7 +84,8 @@ class Curva:
             for ponto in self.pontos_da_curva:
                 glVertex2f(ponto.item(X), ponto.item(Y))
             glEnd()
-            glFlush()
+
+        glFlush()
 
 class Hermite(Curva):
 
