@@ -43,7 +43,7 @@ class Interface:
         gluOrtho2D(-self.limite_x,self.limite_x,-self.limite_y,self.limite_y)
 
         self.plano_cartesiano()
-        if self.curva : self.curva.desenha("curvas")
+        if self.curva : self.curva.desenha("curva")
         glFlush()
 
     def reshape(self, largura, altura):
@@ -69,7 +69,7 @@ class Interface:
             if(button == GLUT_RIGHT_BUTTON):
                 if(state == GLUT_DOWN):
                     self.curva.calcular_pontos_da_curva()
-                    self.curva.desenha("curvas")
+                    self.curva.desenha("curva")
                     self.tarefa = MANIPULAR_BEZIER
 
         elif (self.tarefa == MANIPULAR_BEZIER) or (self.tarefa == MANIPULAR_SPLINES) or (self.tarefa == MANIPULAR_CATMULL) or (self.tarefa == MANIPULAR_HERMITE):
@@ -90,7 +90,7 @@ class Interface:
         if (self.tarefa == MANIPULAR_BEZIER) or (self.tarefa == MANIPULAR_SPLINES) or (self.tarefa == MANIPULAR_CATMULL) or (self.tarefa == MANIPULAR_HERMITE):
             if self.elemento_selecionado != None:
                 self.curva.mover_ponto(self.elemento_selecionado, x, y)
-                self.curva.desenha("curvas")
+                self.curva.desenha("curva")
             glutPostRedisplay()
 
     def menu_principal(self, opcao):

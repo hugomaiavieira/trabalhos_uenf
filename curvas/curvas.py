@@ -68,7 +68,7 @@ class Curva:
         glEnd()
         glFlush()
 
-        if fase == "curvas":
+        if fase == "curva":
             parametro = GL_LINE_LOOP # Desenha poligono
         else:
             parametro = GL_LINE_STRIP # Desenha apenas linhas
@@ -81,7 +81,7 @@ class Curva:
         glEnd()
         glFlush()
 
-        if fase == "curvas":
+        if fase == "curva":
             # Desenha curvas
             glColor3f(1,0,0)
             glBegin(GL_LINE_STRIP)
@@ -98,6 +98,37 @@ class Hermite(Curva):
                               [-3, 3, -2, -1],
                               [0, 0, 1, 0],
                               [1, 0, 0, 0]])
+
+    def desenha(self, fase=""):
+        # Desenha pontos
+        glColor3f(1,0,0)
+        glPointSize(3)
+        glBegin(GL_POINTS)
+        for ponto in self.pontos:
+            glVertex2f(ponto[X],ponto[Y])
+        glEnd()
+
+        if (fase == "curva") and (self.pontos):
+            glColor3f(0.2,0.5,0.8)
+            glColor3f(0,0,1)
+            glBegin(GL_LINE_STRIP) # Linha entre ponto 1 e sua tangente
+            glVertex2f(self.pontos[0][X],self.pontos[0][Y])
+            glVertex2f(self.pontos[2][X],self.pontos[2][Y])
+            glEnd()
+            glBegin(GL_LINE_STRIP) # Linha entre ponto 2 e sua tangente
+            glVertex2f(self.pontos[1][X],self.pontos[1][Y])
+            glVertex2f(self.pontos[3][X],self.pontos[3][Y])
+            glEnd()
+
+        if fase == "curva":
+            # Desenha curvas
+            glColor3f(1,0,0)
+            glBegin(GL_LINE_STRIP)
+            for ponto in self.pontos_da_curva:
+                glVertex2f(ponto.item(X), ponto.item(Y))
+            glEnd()
+
+        glFlush()
 
 class Bezier(Curva):
 
