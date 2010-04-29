@@ -60,17 +60,31 @@ class Interface:
         x = x - self.limite_x
         y = self.limite_y - y
 
-        if (self.tarefa == DESENHAR_BEZIER) or (self.tarefa == DESENHAR_SPLINES) or (self.tarefa == DESENHAR_CATMULL) or (self.tarefa == DESENHAR_HERMITE):
+        if self.tarefa == DESENHAR_HERMITE:
             if(button == GLUT_LEFT_BUTTON):
                 if(state == GLUT_DOWN):
-                    if len(self.curva.pontos) < 4:
+                    if len(self.curva.pontos) < 1:
                         self.curva.adicionar_ponto(array([x,y]))
                         self.curva.desenha()
-            if(button == GLUT_RIGHT_BUTTON):
+                    else:
+                        self.curva.adicionar_ponto(array([x,y]))
+                        self.curva.adicionar_tangentes()
+                        self.curva.calcular_pontos_da_curva()
+                        self.curva.desenha("curva")
+                        self.tarefa = MANIPULAR_HERMITE
+
+        if (self.tarefa == DESENHAR_BEZIER) or (self.tarefa == DESENHAR_SPLINES) or (self.tarefa == DESENHAR_CATMULL):
+            if(button == GLUT_LEFT_BUTTON):
                 if(state == GLUT_DOWN):
-                    self.curva.calcular_pontos_da_curva()
-                    self.curva.desenha("curva")
-                    self.tarefa = MANIPULAR_BEZIER
+                    if len(self.curva.pontos) < 3:
+                        self.curva.adicionar_ponto(array([x,y]))
+                        self.curva.desenha()
+                    else:
+                        self.curva.adicionar_ponto(array([x,y]))
+                        self.curva.calcular_pontos_da_curva()
+                        self.curva.desenha("curva")
+                        self.tarefa = MANIPULAR_BEZIER
+
 
         elif (self.tarefa == MANIPULAR_BEZIER) or (self.tarefa == MANIPULAR_SPLINES) or (self.tarefa == MANIPULAR_CATMULL) or (self.tarefa == MANIPULAR_HERMITE):
             if(button == GLUT_LEFT_BUTTON):
