@@ -1,20 +1,70 @@
-from sys import argv
+from OpenGL.GL import *
+from numpy import array, matrix, transpose, dot
 
-class Malhas(object):
+X=0
+Y=1
+Z=2
 
-    def __init__(arquivo):
-        pass
+class Malha(object):
 
-def ler_dados(arquivo):
-    arquivo = arquivo.read().splitlines()
-    if "" in arquivo: arquivo.remove("")
-    dados = []
-    for linha in arquivo:
-        aux = []
-        linha = linha.split()
-        for item in linha:
-            item = item.split(",")
-            aux.append(map(int,item))
-        dados.append(aux)
-    return dados
+    def __init__(self, arquivo):
+        arquivo = open(arquivo)
+        self.pontos = Malha.ler_dados(arquivo)
+        self.pontos_da_curva = []
+
+    @classmethod
+    def ler_dados(self, arquivo):
+        arquivo = arquivo.read().splitlines()
+        if "" in arquivo: arquivo.remove("")
+        dados = []
+        for linha in arquivo:
+            aux = []
+            linha = linha.split()
+            for item in linha:
+                item = item.split(",")
+                aux.append(map(int,item))
+            dados.append(aux)
+        return dados
+
+    def matriz_pontos(self, eixo):
+        matriz = []
+        for linha in self.pontos:
+            aux = []
+            for ponto in linha:
+                aux.append(ponto[eixo])
+            matriz.append(aux)
+        return matrix(matriz)
+
+    def calcular_pontos_da_curva(self, passo=0.03):
+        self.pontos_da_curva = []
+        s, t = (0,0)
+        while t <= 1:
+            vetor_t = matrix([pow(t,3), pow(t,2), t, 1])
+            vetor_s = matrix([pow(s,3), pow(s,2), s, 1])
+
+            ponto_x = (vetor_s * self.matriz * self.matriz_pontos(X) * self.matriz.transpose() * vetor_s.transpose())
+            ponto_y = (vetor_s * self.matriz * self.matriz_pontos(Y) * self.matriz.transpose() * vetor_s.transpose())
+            ponto_z = (vetor_s * self.matriz * self.matriz_pontos(Z) * self.matriz.transpose() * vetor_s.transpose())
+
+            self.pontos_da_curva.append(array([float(ponto_x), float(ponto_y), float(ponto_z)]))
+            t+=passo
+            s+=passo
+
+    def desenha(self):
+        glColor3f(0,0,0)
+        glBegin(GL_LINE_STRIP)
+        for ponto in self.pontos_da_curva:
+            glVertex3f(ponto.item(X), ponto.item(Y), ponto.item(Z))
+        glEnd()
+        glFlush()
+
+
+class Bezier(Malha):
+
+    def __init__(self, arquivo):
+        Malha.__init__(self, arquivo)
+        self.matriz = matrix([[-1, 3, -3, 1],
+                              [3, -6, 3, 0],
+                              [-3, 3, 0, 0],
+                              [1, 0, 0, 0]])
 
