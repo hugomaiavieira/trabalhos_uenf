@@ -41,8 +41,7 @@ class Interface:
         gluOrtho2D(-self.limite_x,self.limite_x,-self.limite_y,self.limite_y)
 
         self.plano_cartesiano()
-        if self.malha != None:
-            self.malha.desenha()
+        if self.malha: self.malha.desenha()
         glFlush()
 
     def reshape(self, largura, altura):

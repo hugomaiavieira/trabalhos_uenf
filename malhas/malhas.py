@@ -12,6 +12,7 @@ class Malha(object):
         arquivo = open(arquivo)
         self.pontos = Malha.ler_dados(arquivo)
         self.curva_s_t = []
+        self.curva_t_s = []
 
     @classmethod
     def ler_dados(self, arquivo):
@@ -38,9 +39,9 @@ class Malha(object):
 
     def calcular_pontos_da_curva(self):
         self.curva_s_t = []
-        curva_t = []
         passo = 0.1
         for s in frange(0,1,passo):
+            curva_t = []
             for t in frange(0,1,passo):
                 vetor_s = matrix([pow(s,3), pow(s,2), s, 1])
                 vetor_t = matrix([pow(t,3), pow(t,2), t, 1])
@@ -49,8 +50,24 @@ class Malha(object):
                 ponto_y = (vetor_s * self.matriz * self.matriz_pontos(Y) * self.matriz.transpose() * vetor_t.transpose())
                 ponto_z = (vetor_s * self.matriz * self.matriz_pontos(Z) * self.matriz.transpose() * vetor_t.transpose())
 
-                curva_t.append(array([float(ponto_x), float(ponto_y), float(ponto_z)]))
+                curva_t.append([float(ponto_x), float(ponto_y), float(ponto_z)])
             self.curva_s_t.append(curva_t)
+
+
+        self.curva_t_s = []
+        passo = 0.1
+        for t in frange(0,1,passo):
+            curva_s = []
+            for s in frange(0,1,passo):
+                vetor_s = matrix([pow(s,3), pow(s,2), s, 1])
+                vetor_t = matrix([pow(t,3), pow(t,2), t, 1])
+
+                ponto_x = (vetor_s * self.matriz * self.matriz_pontos(X) * self.matriz.transpose() * vetor_t.transpose())
+                ponto_y = (vetor_s * self.matriz * self.matriz_pontos(Y) * self.matriz.transpose() * vetor_t.transpose())
+                ponto_z = (vetor_s * self.matriz * self.matriz_pontos(Z) * self.matriz.transpose() * vetor_t.transpose())
+
+                curva_s.append([float(ponto_x), float(ponto_y), float(ponto_z)])
+            self.curva_t_s.append(curva_s)
 
     def desenha(self):
         # Desenha pontos
@@ -62,21 +79,28 @@ class Malha(object):
                 glVertex2f(ponto[X],ponto[Y])
         glEnd()
 
-        glColor3f(0.2,0.4,0.6)
-        for linha in self.pontos:
-            for ponto in linha:
-                glBegin(GL_LINES)
-                glVertex2f(ponto[X],ponto[Y])
-                glVertex2f(ponto[X],0)
-                glEnd()
+#        glColor3f(0.2,0.4,0.6)
+#        for linha in self.pontos:
+#            for ponto in linha:
+#                glBegin(GL_LINES)
+#                glVertex2f(ponto[X],ponto[Y])
+#                glVertex2f(ponto[X],0)
+#                glEnd()
 
         glColor3f(0,0,1)
         for linha in self.curva_s_t:
             glBegin(GL_LINE_STRIP)
             for ponto in linha:
-                glVertex2f(ponto.item(X), ponto.item(Y))
+                glVertex2f(ponto[X], ponto[Y])
             glEnd()
-            glFlush()
+
+        for linha in self.curva_t_s:
+            glBegin(GL_LINE_STRIP)
+            for ponto in linha:
+                glVertex2f(ponto[X], ponto[Y])
+            glEnd()
+
+        glFlush()
 
 
 class Bezier(Malha):
