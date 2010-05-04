@@ -1,26 +1,10 @@
 from OpenGL.GL import *
 from numpy import array, matrix, transpose, dot
+from functions import frange
 
 X=0
 Y=1
 Z=2
-
-def frange(start, end=None, inc=1.0):
-    "A range function, that does accept float increments..."
-
-    if end == None:
-        end = start + 0.0
-        start = 0.0
-
-    L = []
-    while 1:
-        next = start + len(L) * inc
-        if inc > 0 and next >= end:
-            break
-        elif inc < 0 and next <= end:
-            break
-        L.append(next)
-    return L
 
 class Malha(object):
 
@@ -55,8 +39,9 @@ class Malha(object):
     def calcular_pontos_da_curva(self):
         self.curva_s_t = []
         curva_t = []
-        for s in frange(0,1,0.1):
-            for t in frange(0,1,0.1):
+        passo = 0.1
+        for s in frange(0,1,passo):
+            for t in frange(0,1,passo):
                 vetor_s = matrix([pow(s,3), pow(s,2), s, 1])
                 vetor_t = matrix([pow(t,3), pow(t,2), t, 1])
 
@@ -87,11 +72,11 @@ class Malha(object):
 
         glColor3f(0,0,1)
         for linha in self.curva_s_t:
-            glBegin(GL_POINTS)
+            glBegin(GL_LINE_STRIP)
             for ponto in linha:
                 glVertex2f(ponto.item(X), ponto.item(Y))
             glEnd()
-        glFlush()
+            glFlush()
 
 
 class Bezier(Malha):
