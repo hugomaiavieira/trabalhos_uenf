@@ -55,14 +55,14 @@ class Malha(object):
     def calcular_pontos_da_curva(self):
         self.curva_s_t = []
         curva_t = []
-        for s in frange(0,1,0.02):
-            for t in frange(0,1,0.03):
+        for s in frange(0,1,0.1):
+            for t in frange(0,1,0.1):
                 vetor_s = matrix([pow(s,3), pow(s,2), s, 1])
                 vetor_t = matrix([pow(t,3), pow(t,2), t, 1])
 
-                ponto_x = (vetor_s * self.matriz * self.matriz_pontos(X) * self.matriz.transpose() * vetor_s.transpose())
-                ponto_y = (vetor_s * self.matriz * self.matriz_pontos(Y) * self.matriz.transpose() * vetor_s.transpose())
-                ponto_z = (vetor_s * self.matriz * self.matriz_pontos(Z) * self.matriz.transpose() * vetor_s.transpose())
+                ponto_x = (vetor_s * self.matriz * self.matriz_pontos(X) * self.matriz.transpose() * vetor_t.transpose())
+                ponto_y = (vetor_s * self.matriz * self.matriz_pontos(Y) * self.matriz.transpose() * vetor_t.transpose())
+                ponto_z = (vetor_s * self.matriz * self.matriz_pontos(Z) * self.matriz.transpose() * vetor_t.transpose())
 
                 curva_t.append(array([float(ponto_x), float(ponto_y), float(ponto_z)]))
             self.curva_s_t.append(curva_t)
@@ -87,7 +87,7 @@ class Malha(object):
 
         glColor3f(0,0,1)
         for linha in self.curva_s_t:
-            glBegin(GL_LINE_STRIP)
+            glBegin(GL_POINTS)
             for ponto in linha:
                 glVertex2f(ponto.item(X), ponto.item(Y))
             glEnd()
