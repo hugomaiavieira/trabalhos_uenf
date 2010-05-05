@@ -80,7 +80,7 @@ class Malha(object):
         glBegin(GL_POINTS)
         for linha in self.pontos:
             for ponto in linha:
-                glVertex2f(ponto[X],ponto[Y])
+                glVertex3f(ponto[X],ponto[Y], ponto[Z])
         glEnd()
 
 #        glColor3f(0.2,0.4,0.6)
@@ -95,13 +95,13 @@ class Malha(object):
         for linha in self.curva_s_t:
             glBegin(GL_LINE_STRIP)
             for ponto in linha:
-                glVertex2f(ponto[X], ponto[Y])
+                glVertex3f(ponto[X], ponto[Y], ponto[Z])
             glEnd()
 
         for linha in self.curva_t_s:
             glBegin(GL_LINE_STRIP)
             for ponto in linha:
-                glVertex2f(ponto[X], ponto[Y])
+                glVertex3f(ponto[X], ponto[Y], ponto[Z])
             glEnd()
 
         glFlush()
@@ -122,12 +122,4 @@ class Splines(Malha):
                                 [3, -6, 3, 0],
                                 [-3, 0, 3, 0],
                                 [1, 4, 1, 0]]) / 6.
-
-class Catmull(Malha):
-    def __init__(self, pontos=[]):
-        Malha.__init__(self, pontos)
-        self.matriz = matrix([[-1, 3, -3, 1],
-                                [2, -5, 4, -1],
-                                [-1, 0, 1, 0],
-                                [0, 2, 0, 0]]) / 2.
 

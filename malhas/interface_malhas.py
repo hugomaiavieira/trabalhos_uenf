@@ -2,53 +2,82 @@
 # Autor: Hugo Henriques Maia Vieira
 # Licença: creative commons by-nc-sa
 
-
+from   sys import argv
 from   OpenGL.GL import *
 from   OpenGL.GLU import *
 from   OpenGL.GLUT import *
-from sys import argv
 
-from malhas import Bezier, Splines, Catmull
+from malhas import Bezier, Splines
 
-BEZIER, SPLINES, CATMULL, LIMPAR = range(4)
+BEZIER, SPLINES, LIMPAR = range(3)
 ARQUIVO = "dados.teste"
 
 class Interface:
 
     def __init__(self):
         self.malha = None
-        self.limite_x = 300
-        self.limite_y = 300
+        self.angulo = 80
+        self.aspecto = 0
+        self.rotacao = 0
+        self.inclinacao = 0
 
     def init(self):
         glClearColor(1, 1, 1, 1)
 
-    def plano_cartesiano(self):
-        glColor3f(0, 0, 0)
-        glLineWidth(1)
+    # Função usada para especificar o volume de visualização
+    def EspecificaParametrosVisualizacao(self):
 
-        glBegin(GL_LINES)
-        glVertex2f(-self.limite_x, 0)
-        glVertex2f(self.limite_x, 0)
-        glVertex2f(0, -self.limite_y)
-        glVertex2f(0, self.limite_y)
-        glEnd()
+    	glMatrixMode(GL_PROJECTION)
+    	glLoadIdentity()
+
+    	gluPerspective(self.angulo,self.aspecto,0.1,500)
+
+    	glMatrixMode(GL_MODELVIEW)
+    	glLoadIdentity()
+
+    	gluLookAt(self.rotacao,self.inclinacao,250, 0,0,0, 0,1,0)
+
+    def gerencia_mouse(self, button, state, x, y):
+        if (button == GLUT_LEFT_BUTTON):
+        	if (state == GLUT_DOWN): # Zoom-in
+        		if (self.angulo >= 10): self.angulo -= 5
+
+        if (button == GLUT_RIGHT_BUTTON):
+        	if (state == GLUT_DOWN): # Zoom-out
+        		if (self.angulo <= 130): self.angulo += 5
+
+        self.EspecificaParametrosVisualizacao()
+        glutPostRedisplay()
+
+    def gerencia_teclado(self, tecla, x, y):
+        if tecla == 101: # cima
+            self.inclinacao -= 5
+        if tecla == 103: # baixo
+            self.inclinacao += 5
+        if tecla == 102: # direita
+    		self.rotacao -= 5
+        if tecla == 100: # esquerda
+    		self.rotacao += 5
+
+        self.EspecificaParametrosVisualizacao()
+        glutPostRedisplay()
 
     def display(self):
-        glClear(GL_COLOR_BUFFER_BIT)
+    	glClear(GL_COLOR_BUFFER_BIT)
+    	glColor3f(0.0, 0.0, 1.0)
 
-        glLoadIdentity()
-        gluOrtho2D(-self.limite_x,self.limite_x,-self.limite_y,self.limite_y)
-
-        self.plano_cartesiano()
         if self.malha: self.malha.desenha()
-        glFlush()
+
+    	glutSwapBuffers()
 
     def reshape(self, largura, altura):
+        if ( altura == 0 ): altura = 1
+    	# Especifica o tamanho da viewport
         glViewport(0 , 0, largura, altura)
-        self.limite_x = largura/2
-        self.limite_y = altura/2
+    	# Calcula a correção de aspecto
+        self.aspecto = largura/altura
 
+    	self.EspecificaParametrosVisualizacao()
 
     def menu_principal(self, opcao):
         if opcao == BEZIER:
@@ -58,11 +87,6 @@ class Interface:
             glutPostRedisplay()
         if opcao == SPLINES:
             self.malha = Splines(ARQUIVO)
-            self.malha.calcular_pontos_da_curva()
-            self.malha.desenha()
-            glutPostRedisplay()
-        if opcao == CATMULL:
-            self.malha = Catmull(ARQUIVO)
             self.malha.calcular_pontos_da_curva()
             self.malha.desenha()
             glutPostRedisplay()
@@ -77,7 +101,6 @@ class Interface:
         menu = glutCreateMenu(self.menu_principal)
         glutAddMenuEntry("Bezier", BEZIER)
         glutAddMenuEntry("Splines", SPLINES)
-        glutAddMenuEntry("Catmull-rom", CATMULL)
         glutAddMenuEntry("Limpar", LIMPAR)
 
         glutAttachMenu(GLUT_MIDDLE_BUTTON)
@@ -85,12 +108,13 @@ class Interface:
     def main(self):
         glutInit(argv)
 
-        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
-        glutInitWindowSize(self.limite_x*2,self.limite_y*2)
-        glutCreateWindow("Malhas")
-
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH)
+    	glutInitWindowSize(600,600)
+    	glutCreateWindow("Visualizacao 3D")
         glutDisplayFunc(self.display)
         glutReshapeFunc(self.reshape)
+        glutSpecialFunc(self.gerencia_teclado)
+    	glutMouseFunc(self.gerencia_mouse)
         self.init()
         self.cria_menu()
         glutMainLoop()
