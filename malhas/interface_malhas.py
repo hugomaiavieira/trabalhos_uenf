@@ -8,9 +8,9 @@ from   OpenGL.GLU import *
 from   OpenGL.GLUT import *
 from sys import argv
 
-from malhas import Bezier
+from malhas import Bezier, Splines, Catmull
 
-BEZIER, SPLINES, CATMULL = range(3)
+BEZIER, SPLINES, CATMULL, LIMPAR = range(4)
 ARQUIVO = "dados.teste"
 
 class Interface:
@@ -57,9 +57,19 @@ class Interface:
             self.malha.desenha()
             glutPostRedisplay()
         if opcao == SPLINES:
-            pass
+            self.malha = Splines(ARQUIVO)
+            self.malha.calcular_pontos_da_curva()
+            self.malha.desenha()
+            glutPostRedisplay()
         if opcao == CATMULL:
-            pass
+            self.malha = Catmull(ARQUIVO)
+            self.malha.calcular_pontos_da_curva()
+            self.malha.desenha()
+            glutPostRedisplay()
+        if opcao == LIMPAR:
+            if self.malha:
+                self.malha.limpar()
+                self.malha = None
         return 0
 
     def cria_menu(self):
@@ -68,6 +78,7 @@ class Interface:
         glutAddMenuEntry("Bezier", BEZIER)
         glutAddMenuEntry("Splines", SPLINES)
         glutAddMenuEntry("Catmull-rom", CATMULL)
+        glutAddMenuEntry("Limpar", LIMPAR)
 
         glutAttachMenu(GLUT_MIDDLE_BUTTON)
 
