@@ -80,15 +80,15 @@ class Malha(object):
         glBegin(GL_POINTS)
         for linha in self.pontos:
             for ponto in linha:
-                glVertex3f(ponto[X],ponto[Y], ponto[Z])
+                glVertex3f(ponto[X], ponto[Y], ponto[Z])
         glEnd()
 
 #        glColor3f(0.2,0.4,0.6)
 #        for linha in self.pontos:
 #            for ponto in linha:
 #                glBegin(GL_LINES)
-#                glVertex2f(ponto[X],ponto[Y])
-#                glVertex2f(ponto[X],0)
+#                glVertex3f(ponto[X], ponto[Y], ponto[Z])
+#                glVertex3f(ponto[X], 0, ponto[Z])
 #                glEnd()
 
         glColor3f(0,0,1)
