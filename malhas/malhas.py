@@ -46,8 +46,8 @@ class Malha(object):
         passo = 0.1
         for s in frange(0,1,passo):
             curva_t = []
+            vetor_s = matrix([pow(s,3), pow(s,2), s, 1])
             for t in frange(0,1,passo):
-                vetor_s = matrix([pow(s,3), pow(s,2), s, 1])
                 vetor_t = matrix([pow(t,3), pow(t,2), t, 1])
 
                 ponto_x = (vetor_s * self.matriz * self.matriz_pontos(X) * self.matriz.transpose() * vetor_t.transpose())
@@ -62,9 +62,9 @@ class Malha(object):
         passo = 0.1
         for t in frange(0,1,passo):
             curva_s = []
+            vetor_t = matrix([pow(t,3), pow(t,2), t, 1])
             for s in frange(0,1,passo):
                 vetor_s = matrix([pow(s,3), pow(s,2), s, 1])
-                vetor_t = matrix([pow(t,3), pow(t,2), t, 1])
 
                 ponto_x = (vetor_s * self.matriz * self.matriz_pontos(X) * self.matriz.transpose() * vetor_t.transpose())
                 ponto_y = (vetor_s * self.matriz * self.matriz_pontos(Y) * self.matriz.transpose() * vetor_t.transpose())
