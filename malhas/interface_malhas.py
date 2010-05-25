@@ -18,8 +18,9 @@ class Interface:
         self.malha = None
         self.angulo = 80
         self.aspecto = 0
-        self.rotacao = 0
-        self.inclinacao = 0
+        self.deslocamentoX = 0
+        self.deslocamentoY = 0
+        self.deslocamentoZ = 0
 
     def init(self):
         glClearColor(1, 1, 1, 1)
@@ -30,12 +31,14 @@ class Interface:
     	glMatrixMode(GL_PROJECTION)
     	glLoadIdentity()
 
-    	gluPerspective(self.angulo,self.aspecto,0.1,500)
+    	gluPerspective(self.angulo,self.aspecto,0.5,500)
 
     	glMatrixMode(GL_MODELVIEW)
     	glLoadIdentity()
 
-    	gluLookAt(self.rotacao,self.inclinacao,250, 0,0,0, 0,1,0)
+    	gluLookAt(self.deslocamentoX, self.deslocamentoY, 250 + self.deslocamentoZ,
+    	          self.deslocamentoX, self.deslocamentoY, self.deslocamentoZ,
+    	          0,1,0)
 
     def gerencia_mouse(self, button, state, x, y):
         if (button == GLUT_LEFT_BUTTON):
@@ -50,14 +53,19 @@ class Interface:
         glutPostRedisplay()
 
     def gerencia_teclado(self, tecla, x, y):
-        if tecla == 101: # cima
-            self.inclinacao -= 5
-        if tecla == 103: # baixo
-            self.inclinacao += 5
-        if tecla == 102: # direita
-    		self.rotacao -= 5
-        if tecla == 100: # esquerda
-    		self.rotacao += 5
+        if tecla == GLUT_KEY_UP: # cima
+            self.deslocamentoY -= 2
+        if tecla == GLUT_KEY_DOWN: # baixo
+            self.deslocamentoY += 2
+        if tecla == GLUT_KEY_LEFT: # direita
+    		self.deslocamentoX += 2
+        if tecla == GLUT_KEY_RIGHT: # esquerda
+    		self.deslocamentoX -= 2
+        if tecla == GLUT_KEY_PAGE_UP: # direita
+    		self.deslocamentoZ -= 2
+        if tecla == GLUT_KEY_PAGE_DOWN: # esquerda
+    		self.deslocamentoZ += 2
+
 
         self.EspecificaParametrosVisualizacao()
         glutPostRedisplay()
