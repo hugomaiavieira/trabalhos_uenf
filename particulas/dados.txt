@@ -1,0 +1,16 @@
+#dados_gerais
+gravidade 9.8
+delta_t 0.01
+
+#particula1
+massa 60
+posicao 20 10 10
+velocidade 1 1 1
+forca_sofrida 0 0 0
+
+#particula2
+massa 40
+posicao 10 10 10
+velocidade 2 1 1
+forca_sofrida 1 -1 -1
+
