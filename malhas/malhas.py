@@ -13,6 +13,7 @@ class Malha(object):
         self.pontos = Malha.ler_dados(arquivo)
         self.curva_s_t = []
         self.curva_t_s = []
+        self.centro = self.calcular_centro()
 
     @classmethod
     def ler_dados(self, arquivo):
@@ -27,6 +28,18 @@ class Malha(object):
                 aux.append(map(int,item))
             dados.append(aux)
         return dados
+
+    def calcular_centro(self):
+        soma_x = soma_y = soma_z = 0
+        n=0
+        for linha in self.pontos:
+            for ponto in linha:
+                soma_x += ponto[X]
+                soma_y += ponto[Y]
+                soma_z += ponto[Z]
+                n+=1
+        return (soma_x/n, soma_y/n, soma_z/n)
+
 
     def matriz_pontos(self, eixo):
         matriz = []

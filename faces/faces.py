@@ -6,15 +6,21 @@ from OpenGL.GL import *
 from re import match
 from random import random
 
-X=0
-Y=1
-Z=2
+X=R=0
+Y=G=1
+Z=B=2
 
 class Faces (object):
 
     def __init__(self):
         self.vertices = []
         self.faces = []
+        self.cores = []
+
+    def definir_cores_das_faces(self):
+        for i in range(len(self.faces)):
+            r=random(); g=random(); b=random() # Cores aleatórias para faces
+            self.cores.append([r,g,b])
 
     def ler_dados(self, arquivo):
         linha = arquivo.readline()
@@ -35,6 +41,7 @@ class Faces (object):
                     linha = arquivo.readline()
             else:
                 linha = arquivo.readline()
+        self.definir_cores_das_faces()
 
     def desenha(self):
         # Desenha vertices
@@ -46,14 +53,16 @@ class Faces (object):
         glEnd()
 
         # Desenha faces
+        i=0
         for face in self.faces:
-            r=random(); g=random(); b=random() # Cores aleatórias para faces
-            glColor3f(r,g,b)
+            cor = self.cores[i]
+            glColor3f(cor[R], cor[G], cor[B])
             glBegin(GL_POLYGON)
             for indice in face:
                 vertice =  self.vertices[indice-1]
                 glVertex3f(vertice[X], vertice[Y], vertice[Z])
             glEnd()
+            i+=1
 
         glFlush()
 

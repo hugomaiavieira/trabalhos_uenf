@@ -16,11 +16,9 @@ class Interface:
     def __init__(self):
         self.faces = Faces()
         self.faces.ler_dados(open(ARQUIVO))
-        self.angulo = 80
+        self.zoom = 80
         self.aspecto = 0
-        self.deslocamentoX = 0
-        self.deslocamentoY = 0
-        self.deslocamentoZ = 0
+        self.angulo = 0
 
     def init(self):
         glClearColor(1, 1, 1, 1)
@@ -31,40 +29,32 @@ class Interface:
     	glMatrixMode(GL_PROJECTION)
     	glLoadIdentity()
 
-    	gluPerspective(self.angulo,self.aspecto,0.5,500)
+    	gluPerspective(self.zoom,self.aspecto,0.5,500)
 
     	glMatrixMode(GL_MODELVIEW)
     	glLoadIdentity()
 
-    	gluLookAt(self.deslocamentoX, self.deslocamentoY, 250 + self.deslocamentoZ,
-    	          self.deslocamentoX, self.deslocamentoY, self.deslocamentoZ,
+    	gluLookAt(0,0,500,
+    	          0,0,0,
     	          0,1,0)
 
     def gerencia_mouse(self, button, state, x, y):
         if (button == GLUT_LEFT_BUTTON):
         	if (state == GLUT_DOWN): # Zoom-in
-        		if (self.angulo >= 10): self.angulo -= 5
+        		if (self.zoom >= 10): self.zoom -= 5
 
         if (button == GLUT_RIGHT_BUTTON):
         	if (state == GLUT_DOWN): # Zoom-out
-        		if (self.angulo <= 130): self.angulo += 5
+        		if (self.zoom <= 130): self.zoom += 5
 
         self.EspecificaParametrosVisualizacao()
         glutPostRedisplay()
 
     def gerencia_teclado(self, tecla, x, y):
-        if tecla == GLUT_KEY_UP: # cima
-            self.deslocamentoY -= 2
-        if tecla == GLUT_KEY_DOWN: # baixo
-            self.deslocamentoY += 2
         if tecla == GLUT_KEY_LEFT: # direita
-    		self.deslocamentoX += 2
+    		self.angulo += 2
         if tecla == GLUT_KEY_RIGHT: # esquerda
-    		self.deslocamentoX -= 2
-        if tecla == GLUT_KEY_PAGE_UP: # direita
-    		self.deslocamentoZ -= 2
-        if tecla == GLUT_KEY_PAGE_DOWN: # esquerda
-    		self.deslocamentoZ += 2
+    		self.angulo -= 2
 
 
         self.EspecificaParametrosVisualizacao()
@@ -74,6 +64,7 @@ class Interface:
     	glClear(GL_COLOR_BUFFER_BIT)
     	glColor3f(0.0, 0.0, 1.0)
 
+        glRotatef(self.angulo, 0, 1, 0);
         self.faces.desenha()
 
     	glutSwapBuffers()
