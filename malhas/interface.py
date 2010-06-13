@@ -19,7 +19,7 @@ Z=2
 class Interface:
 
     def __init__(self):
-        self.malha = Bezier(ARQUIVO)
+        self.malha = None
         self.zoom = 50
         self.aspecto = 0
         self.angulo = 0
@@ -38,9 +38,14 @@ class Interface:
     	glMatrixMode(GL_MODELVIEW)
     	glLoadIdentity()
 
-    	gluLookAt(0,0,500,
-    	          self.malha.centro[X],self.malha.centro[Y],self.malha.centro[Z],
-    	          0,1,0)
+        if self.malha:
+        	gluLookAt(0,0,500,
+        	          self.malha.centro[X],self.malha.centro[Y],self.malha.centro[Z],
+        	          0,1,0)
+        else:
+        	gluLookAt(0,0,500,
+        	          0,0,0,
+        	          0,1,0)
 
     def gerencia_mouse(self, button, state, x, y):
         if (button == GLUT_LEFT_BUTTON):
