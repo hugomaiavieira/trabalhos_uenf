@@ -1,4 +1,13 @@
+# -*- coding: UTF-8 -*-
+# Autor: Hugo Henriques Maia Vieira
+# Licença: creative commons by-nc-sa
+
+from OpenGL.GL import *
 from re import match
+
+X=0
+Y=1
+Z=2
 
 class Particula(object):
     def __init__(self, massa=0, posicao=[0,0,0], velocidade=[0,0,0], forca_sofrida=[0,0,0]):
@@ -6,6 +15,13 @@ class Particula(object):
         self.posicao = posicao
         self.velocidade = velocidade
         self.forca_sofrida = forca_sofrida
+
+    def desenhar(self):
+        glColor3f(1,0,0)
+        glPointSize(3)
+        glBegin(GL_POINTS)
+        glVertex3f(self.posicao[X], self.posicao[Y], self.posicao[Z])
+        glEnd()
 
 
 class SistemaParticulas(object):
@@ -15,8 +31,7 @@ class SistemaParticulas(object):
         self.delta_t = delta_t
         self.gravidade = gravidade
 
-    def ler_dados(self, arquivo):
-        _arquivo = open(arquivo)
+    def ler_dados(self, _arquivo):
         linha = _arquivo.readline()
         while linha:
             if match(r'#dados_gerais', linha):
@@ -41,4 +56,9 @@ class SistemaParticulas(object):
                     if f: particula.forca_sofrida = [float(f.groupdict()['x']), float(f.groupdict()['y']), float(f.groupdict()['z'])]
                     linha = _arquivo.readline()
                 self.particulas.append(particula)
+
+
+    def desenhar(self):
+        for particula in self.particulas:
+            particula.desenhar()
 
