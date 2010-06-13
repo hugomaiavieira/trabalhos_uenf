@@ -15,30 +15,30 @@ class SistemaParticulas(object):
         self.delta_t = delta_t
         self.gravidade = gravidade
 
-    def ler_dados(self, _arquivo):
-        arquivo = open(_arquivo)
-        linha = arquivo.readline()
+    def ler_dados(self, arquivo):
+        _arquivo = open(arquivo)
+        linha = _arquivo.readline()
         while linha:
             if match(r'#dados_gerais', linha):
-                linha = arquivo.readline()
+                linha = _arquivo.readline()
                 while not match(r'^#', linha):
-                    g = match(r'^[Gg]ravidade (?P<gravidade>[-]?[0-9]+([.][0-9]+)?)', linha)
-                    t = match(r'^[Dd]delta[ _]t (?P<delta_t>[0-9]+([.][0-9]+)?)', linha)
+                    g = match(r'^gravidade (?P<gravidade>[-]?[0-9]+([.][0-9]+)?)', linha)
+                    t = match(r'^delta_t (?P<delta_t>[0-9]+([.][0-9]+)?)', linha)
                     if g: self.gravidade = float(g.groupdict()['gravidade'])
                     if t: self.delta_t = float(t.groupdict()['delta_t'])
-                    linha = arquivo.readline()
+                    linha = _arquivo.readline()
             if match(r'#particula', linha):
                 particula = Particula()
-                linha = arquivo.readline()
-                while not match(r'^#', linha):
-                    m = match(r'^[Mm]assa (?P<massa>[0-9]+([.][0-9]+)?)', linha)
-                    p = match(r'^[Pp]osicao (?P<x>[0-9]+([.][0-9]+)?) (?P<y>[0-9]+([.][0-9]+)?) (?P<z>[0-9]+([.][0-9]+)?)', linha)
-                    v = match(r'^[Vv]elociadae (?P<x>[0-9]+([.][0-9]+)?) (?P<y>[0-9]+([.][0-9]+)?) (?P<z>[0-9]+([.][0-9]+)?)', linha)
-                    f = match(r'^[Ff]orca[ _]sofrida (?P<x>[0-9]+([.][0-9]+)?) (?P<y>[0-9]+([.][0-9]+)?) (?P<z>[0-9]+([.][0-9]+)?)', linha)
+                linha = _arquivo.readline()
+                while not match(r'^#', linha) and linha:
+                    m = match(r'^massa (?P<massa>[0-9]+([.][0-9]+)?)', linha)
+                    p = match(r'^posicao (?P<x>-?[0-9]+([.][0-9]+)?) (?P<y>-?[0-9]+([.][0-9]+)?) (?P<z>-?[0-9]+([.][0-9]+)?)', linha)
+                    v = match(r'^velocidade (?P<x>-?[0-9]+([.][0-9]+)?) (?P<y>-?[0-9]+([.][0-9]+)?) (?P<z>-?[0-9]+([.][0-9]+)?)', linha)
+                    f = match(r'^forca_sofrida (?P<x>-?[0-9]+([.][0-9]+)?) (?P<y>-?[0-9]+([.][0-9]+)?) (?P<z>-?[0-9]+([.][0-9]+)?)', linha)
                     if m: particula.massa = float(m.groupdict()['massa'])
                     if p: particula.posicao = [float(p.groupdict()['x']), float(p.groupdict()['y']), float(p.groupdict()['z'])]
                     if v: particula.velocidade = [float(v.groupdict()['x']), float(v.groupdict()['y']), float(v.groupdict()['z'])]
                     if f: particula.forca_sofrida = [float(f.groupdict()['x']), float(f.groupdict()['y']), float(f.groupdict()['z'])]
-                    linha = arquivo.readline()
+                    linha = _arquivo.readline()
                 self.particulas.append(particula)
 
