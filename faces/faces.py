@@ -57,7 +57,7 @@ class Faces (object):
         for face in self.faces:
             cor = self.cores[i]
             glColor3f(cor[R], cor[G], cor[B])
-            glBegin(GL_POLYGON)
+            glBegin(GL_LINE_LOOP)
             for indice in face:
                 vertice =  self.vertices[indice-1]
                 glVertex3f(vertice[X], vertice[Y], vertice[Z])

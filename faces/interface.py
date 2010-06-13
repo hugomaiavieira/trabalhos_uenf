@@ -9,7 +9,7 @@ from   OpenGL.GLUT import *
 
 from faces import Faces
 
-ARQUIVO = "entrada.txt"
+ARQUIVO = "h.txt"
 
 class Interface:
 
@@ -34,7 +34,7 @@ class Interface:
     	glMatrixMode(GL_MODELVIEW)
     	glLoadIdentity()
 
-    	gluLookAt(0,0,500,
+    	gluLookAt(0,0,50,
     	          0,0,0,
     	          0,1,0)
 
