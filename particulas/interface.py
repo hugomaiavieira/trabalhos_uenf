@@ -78,6 +78,11 @@ class Interface:
 
     	self.EspecificaParametrosVisualizacao()
 
+    def update(self, valor):
+        self.sistema.animar()
+        glutPostRedisplay()
+        glutTimerFunc(25, self.update, 0)
+
     def main(self):
         glutInit(argv)
 
@@ -89,6 +94,7 @@ class Interface:
         glutSpecialFunc(self.gerencia_teclado)
     	glutMouseFunc(self.gerencia_mouse)
         self.init()
+        glutTimerFunc(25, self.update, 0)
         glutMainLoop()
 
 if __name__ == "__main__":
