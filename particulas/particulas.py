@@ -11,21 +11,57 @@ Y=1
 Z=2
 
 class Particula(object):
+
     def __init__(self, massa=0, posicao=[0,0,0], velocidade=[0,0,0], forca_sofrida=[0,0,0]):
         self.massa = massa
         self.posicao = posicao
         self.velocidade = velocidade
         self.forca_sofrida = forca_sofrida
 
+    def variar_forca(self, aceleracao):
+        """
+        aceleracao = gravidade
+
+        forca = massa * aceleracao
+
+        forca = massa * gravidade
+        """
+        self.forca_sofrida += self.massa * aceleracao
+
+    def variar_velocidade(self, delta_t):
+        """
+        forca = massa * aceleracao
+        aceleracao = forca / massa
+
+        aceleracao = velocidade / delta_t
+        velocidade = delta_t * aceleracao
+
+        velocidade = delta_t * (forca / massa)
+        """
+        self.velocidade += delta_t * (self.forca_sofrida / self.massa )
+
+    def variar_posicao(self, delta_t):
+        """
+        v = s / delta_t
+        s = delta_t * v
+        """
+        self.posicao += delta_t * self.velocidade
+
+    def animar(self, aceleracao, delta_t):
+        self.variar_forca(aceleracao)
+        self.variar_velocidade(delta_t)
+        self.variar_posicao(delta_t)
+
     def desenhar(self):
-        glColor3f(1,0,0)
-        glPointSize(3)
+        glColor3f(0.2,0.6,0.3)
+        glPointSize(5)
         glBegin(GL_POINTS)
         glVertex3f(self.posicao[X], self.posicao[Y], self.posicao[Z])
         glEnd()
 
 
 class SistemaParticulas(object):
+
     def __init__(self, particulas=[], t0=0, delta_t=0, gravidade=0):
         self.particulas = particulas
         self.t0 = t0
@@ -58,22 +94,9 @@ class SistemaParticulas(object):
                     linha = _arquivo.readline()
                 self.particulas.append(particula)
 
-    def forca_particulas(self):
-        for particula in self.particulas:
-            particula.forca_sofrida = particula.massa * self.gravidade
-
-    def velocidade_particulas(self):
-        for particula in self.particulas:
-            particula.velocidade += self.delta_t * (particula.forca_sofrida / particula.massa )
-
-    def posicao_particulas(self):
-        for particula in self.particulas:
-            particula.posicao += self.delta_t * particula.velocidade
-
     def animar(self):
-        self.forca_particulas()
-        self.velocidade_particulas()
-        self.posicao_particulas()
+        for particula in self.particulas:
+            particula.animar(self.gravidade, self.delta_t)
 
     def desenhar(self):
         for particula in self.particulas:

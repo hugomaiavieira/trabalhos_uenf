@@ -1,6 +1,6 @@
 #dados_gerais
 gravidade -9.8
-delta_t 0.02
+delta_t 0.01
 
 #particula1
 massa 60
@@ -13,10 +13,12 @@ posicao -10 10 10
 #particula3
 massa 10
 posicao 0 10 10
+forca_sofrida 0 2000 0
 
 #particula4
 massa 30
 posicao 10 10 10
+forca_sofrida 500 5000 0
 
 #particula5
 massa 80
