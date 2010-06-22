@@ -5,10 +5,17 @@
 from OpenGL.GL import *
 from re import match
 from numpy import array
+from lib import distance
 
 X=0
 Y=1
 Z=2
+
+class Barreira(object):
+
+    def __init__(self, vertices=[]):
+        self.vertices = vertices
+
 
 class Particula(object):
 
@@ -20,11 +27,8 @@ class Particula(object):
 
     def variar_forca(self, aceleracao):
         """
-        aceleracao = gravidade
-
         forca = massa * aceleracao
 
-        forca = massa * gravidade
         """
         self.forca_sofrida += self.massa * aceleracao
 
@@ -46,6 +50,10 @@ class Particula(object):
         s = delta_t * v
         """
         self.posicao += delta_t * self.velocidade
+
+    def distancia_para_a_barreira(self, barreira):
+        distiancia = distance(barreira.vertices, self.posicao)
+        return distancia
 
     def animar(self, aceleracao, delta_t):
         self.variar_forca(aceleracao)
