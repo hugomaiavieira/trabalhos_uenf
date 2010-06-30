@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
 # Autor: Hugo Henriques Maia Vieira
-# Licença: creative commons by-nc-sa
 
 from   sys import argv
 from   OpenGL.GL import *

@@ -1,11 +1,10 @@
 # -*- coding: UTF-8 -*-
 # Autor: Hugo Henriques Maia Vieira
-# Licença: creative commons by-nc-sa
 
 from OpenGL.GL import *
 from re import match
 from numpy import array
-from lib import distance
+from vector_lib import *
 
 X=0
 Y=1
@@ -52,10 +51,28 @@ class Particula(object):
         self.posicao += delta_t * self.velocidade
 
     def distancia_para_a_barreira(self, barreira):
-        distiancia = distance(barreira.vertices, self.posicao)
+        distancia = distance(barreira.vertices, self.posicao)
         return distancia
 
-    def animar(self, aceleracao, delta_t):
+    def mudar_sentido_x(self):
+        self.velocidade = self.velocidade * array([-1,1,1])
+
+    def mudar_sentido_y(self):
+        self.velocidade = self.velocidade * array([1,-1,1])
+
+    def animar(self, aceleracao, delta_t, barreiras):
+        ponto_de_choque_y = future_intersection(barreiras[0].vertices,self.posicao)
+        if self.posicao[Y] <= ponto_de_choque_y[Y]:
+            self.mudar_sentido_y()
+
+        ponto_de_choque_direita = future_intersection(barreiras[1].vertices,self.posicao)
+        if self.posicao[X] >= ponto_de_choque_direita[X]:
+            self.mudar_sentido_x()
+
+        ponto_de_choque_esquerda = future_intersection(barreiras[2].vertices,self.posicao)
+        if self.posicao[X] <= ponto_de_choque_esquerda[X]:
+            self.mudar_sentido_x()
+
         self.variar_forca(aceleracao)
         self.variar_velocidade(delta_t)
         self.variar_posicao(delta_t)
@@ -72,6 +89,9 @@ class SistemaParticulas(object):
 
     def __init__(self, particulas=[], t0=0, delta_t=0, gravidade=0):
         self.particulas = particulas
+        self.barreiras = [Barreira([array([-41,-25,0]), array([41,-25,0])]),
+                          Barreira([array([30,-41,0]), array([30,41,0])]),
+                          Barreira([array([-30,-41,0]), array([-30,41,0])])]
         self.t0 = t0
         self.delta_t = delta_t
         self.gravidade = gravidade
@@ -104,7 +124,7 @@ class SistemaParticulas(object):
 
     def animar(self):
         for particula in self.particulas:
-            particula.animar(self.gravidade, self.delta_t)
+            particula.animar(self.gravidade, self.delta_t, self.barreiras)
 
     def desenhar(self):
         for particula in self.particulas:

@@ -1,3 +1,6 @@
+# -*- coding: UTF-8 -*-
+# Autor: Hugo Henriques Maia Vieira
+
 from OpenGL.GL import *
 from numpy import array, matrix, transpose, dot
 from functions import frange
@@ -95,14 +98,6 @@ class Malha(object):
             for ponto in linha:
                 glVertex3f(ponto[X], ponto[Y], ponto[Z])
         glEnd()
-
-#        glColor3f(0.2,0.4,0.6)
-#        for linha in self.pontos:
-#            for ponto in linha:
-#                glBegin(GL_LINES)
-#                glVertex3f(ponto[X], ponto[Y], ponto[Z])
-#                glVertex3f(ponto[X], 0, ponto[Z])
-#                glEnd()
 
         glColor3f(0,0,1)
         for linha in self.curva_s_t:

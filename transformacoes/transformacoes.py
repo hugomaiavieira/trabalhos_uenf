@@ -1,6 +1,4 @@
 # Autor: Hugo Henriques Maia Vieira
-# Licença: creative commons by-nc-sa
-
 # -*- coding: UTF-8 -*-
 
 from OpenGL.GL import *

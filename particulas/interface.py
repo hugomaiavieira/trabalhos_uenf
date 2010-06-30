@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
 # Autor: Hugo Henriques Maia Vieira
-# Licença: creative commons by-nc-sa
 
 from   sys import argv
 from   OpenGL.GL import *
@@ -64,7 +63,7 @@ class Interface:
     	glClear(GL_COLOR_BUFFER_BIT)
     	glColor3f(0.0, 0.0, 1.0)
 
-        glRotatef(self.angulo, 0, 1, 0);
+        glRotatef(self.angulo, 0, 1, 0)
         self.sistema.desenhar()
 
     	glutSwapBuffers()

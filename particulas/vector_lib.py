@@ -57,6 +57,10 @@ def future_intersection(vertex, particle):
     return intersection_point
 
 def distance(a, b):
+    """
+    Return distance between two points.
+    """
+
     vector = vector_by(a,b)
     _distance = absolute(vector)
     return _distance
