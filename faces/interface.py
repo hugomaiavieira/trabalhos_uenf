@@ -8,7 +8,7 @@ from   OpenGL.GLUT import *
 
 from faces import Faces
 
-ARQUIVO = "h.txt"
+ARQUIVO = "cubo.txt"
 
 class Interface:
 
@@ -24,6 +24,8 @@ class Interface:
 
     # Função usada para especificar o volume de visualização
     def EspecificaParametrosVisualizacao(self):
+
+        glEnable(GL_CULL_FACE) # Habilita remocao de faces traseiras
 
     	glMatrixMode(GL_PROJECTION)
     	glLoadIdentity()
@@ -60,10 +62,11 @@ class Interface:
         glutPostRedisplay()
 
     def display(self):
-    	glClear(GL_COLOR_BUFFER_BIT)
+    	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     	glColor3f(0.0, 0.0, 1.0)
 
-        glRotatef(self.angulo, 0, 1, 0);
+        glRotatef(self.angulo, 0, 1, 1)
+        glCullFace(GL_FRONT) # Habilita remocao de faces traseiras
         self.faces.desenha()
 
     	glutSwapBuffers()
