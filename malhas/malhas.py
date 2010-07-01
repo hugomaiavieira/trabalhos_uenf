@@ -127,7 +127,15 @@ class Splines(Malha):
     def __init__(self, pontos=[]):
         Malha.__init__(self, pontos)
         self.matriz = matrix([[-1, 3, -3, 1],
-                                [3, -6, 3, 0],
-                                [-3, 0, 3, 0],
-                                [1, 4, 1, 0]]) / 6.
+                              [3, -6, 3, 0],
+                              [-3, 0, 3, 0],
+                              [1, 4, 1, 0]]) / 6.
+
+class Catmull(Malha):
+    def __init__(self, arquivo):
+        Malha.__init__(self, arquivo)
+        self.matriz = matrix([[-1, 3, -3, 1],
+                              [2, -5, 4, -1],
+                              [-1, 0, 1, 0],
+                              [0, 2, 0, 0]]) / 2.
 
