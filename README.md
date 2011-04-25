@@ -1,5 +1,5 @@
-Trabalhos das diciplinas da UENF
-================================
+Trabalhos das disciplinas da UENF
+=================================
 
 Este projeto contém alguns dos meus trabalhos de feitos para a universidade.
 
