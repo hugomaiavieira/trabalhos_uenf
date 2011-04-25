@@ -1,9 +1,8 @@
-Trabalhos de relacionados à Computação Gráfica
-==============================================
+Trabalhos das diciplinas da UENF
+================================
 
-Este projeto contém os spripts dos meus trabalhos de relacionados à Computação
-Gráfica da universidade.
-Eles estão sendo desenvolvidos em Python.
+Este projeto contém alguns dos meus trabalhos de feitos para a universidade.
+
 
 Licença
 -------

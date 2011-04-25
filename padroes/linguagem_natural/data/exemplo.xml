@@ -1,0 +1,4 @@
+<command run="Printer#printObject">mostre o (nome) do (cliente)</command>
+<command run="Printer#printObject">mostre o (telefone) da (Pessoa)</command>
+<command run="">mostre o nada</command>
+
