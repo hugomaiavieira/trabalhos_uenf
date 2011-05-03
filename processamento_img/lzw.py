@@ -19,18 +19,15 @@ class LZW:
         saida = []
         buffer = ''
         for char in str:
-            # enquanto a cadeia atual existir no dicionário, continuamos acresncentando caracteres a ela
             if self.dicionario.has_key(buffer + char):
                 buffer += char
             else:
-                # ao encontrar a maior cadeia presente é emitido o código dessa
-                # cadeia e é criada uma nova cadeia, acrescentando o último
-                # caractere lido.
                 codigo = self.dicionario[buffer]
                 self.add_ao_dicionario(buffer + char)
+                print "%s - %s" % (buffer + char, self.dicionario[buffer + char])
+                saida.append([buffer, codigo])
                 buffer = char
-                saida.append(codigo)
         if buffer:
-            saida.append(self.dicionario[buffer])
+            saida.append([buffer, self.dicionario[buffer]])
         return saida
 
