@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+from time import time
 from random import choice
 from functions import no_zero_range
 
@@ -165,12 +166,24 @@ class PMediana(object):
 
 
 if __name__ == '__main__':
+    inicio=time()
     p = PMediana('pmed1.txt')
-    p.solucao_contrutiva()
-    p.busca_local(500)
-    print "busca local: %s" % (p.solucao)
+    fim=time()
+    tempo = fim - inicio
+    print "Rodar o floyd\t\t tempo: %s" % tempo
 
+
+    inicio=time()
     p.solucao_contrutiva()
-    p.busca_tabu(500)
-    print "busca tabu: %s" % (p.solucao)
+    p.busca_local(1000)
+    fim=time()
+    tempo = fim - inicio
+    print "busca local: %s\t tempo: %s" % (p.solucao, tempo)
+
+    inicio=time()
+    p.solucao_contrutiva()
+    p.busca_tabu(1000)
+    fim=time()
+    tempo = fim - inicio
+    print "busca tabu: %s\t tempo: %s" % (p.solucao, tempo)
 
