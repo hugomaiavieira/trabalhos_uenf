@@ -143,18 +143,19 @@ class PMediana(object):
 
 if __name__ == '__main__':
     inicio=time()
-    p = PMediana('data/pmed6.txt')
+    p = PMediana('data/pmed7.txt')
     fim=time()
     tempo = fim - inicio
     print "Tempo para rodar o algoritmo de Floyd: %s" % tempo
 
-    otimo = 7862
+    otimo = 5551
 
-    inicio=time()
-    p.solucao_contrutiva()
-    p.busca_local(1000)
-    fim=time()
-    tempo = fim - inicio
-    erro = p.solucao - otimo
-    print "solução: %s\t erro: %s\t tempo: %s" % (p.solucao, erro, tempo)
+    for i in range(10):
+        inicio=time()
+        p.solucao_contrutiva()
+        p.busca_local(1000)
+        fim=time()
+        tempo = fim - inicio
+        erro = p.solucao - otimo
+        print "%s) solução: %s\t medianas: %s\t erro: %s\t tempo: %s" % (i+1, p.solucao, p.medianas, erro, tempo)
 
