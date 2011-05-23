@@ -140,50 +140,21 @@ class PMediana(object):
                 self.medianas = medianas
                 self.solucao = distancia
 
-    def busca_tabu(self, iteracoes):
-        """"Meta-heuristica para encontrar a solução ótima."""
-        ultimos_movimentos = ['x', 'x', 'x', 'x', 'x'] # irrelevante. nunca acontece do movimento estar nessa lista.
-        frequencias = {}
-        for i in range(iteracoes):
-            velha_mediana = choice(self.medianas)
-            nova_mediana = choice(list(set(self.vertices).difference(set(self.medianas))))
-            movimento = "%s,%s" % (velha_mediana, nova_mediana)
-            frequencia = frequencias.get(movimento)
-
-            if frequencia == None:
-                frequencias[movimento] = 0
-
-            if (frequencia < 2) and not (movimento in ultimos_movimentos):
-                medianas = list(set(self.medianas).difference(set([velha_mediana])).union(set([nova_mediana])))
-                grafo = self.definir_grafo(medianas)
-                distancia = self.distancia_total(grafo)
-                if distancia < self.solucao:
-                    self.medianas = medianas
-                    self.solucao = distancia
-                ultimos_movimentos.pop(0)
-                ultimos_movimentos.append(movimento)
-            frequencias[movimento] += 1
-
 
 if __name__ == '__main__':
     inicio=time()
-    p = PMediana('pmed1.txt')
+    p = PMediana('pmed6.txt')
     fim=time()
     tempo = fim - inicio
-    print "Rodar o floyd\t\t tempo: %s" % tempo
+    print "Tempo para rodar o algoritmo de Floyd: %s" % tempo
 
+    otimo = 7862
 
     inicio=time()
     p.solucao_contrutiva()
     p.busca_local(1000)
     fim=time()
     tempo = fim - inicio
-    print "busca local: %s\t tempo: %s" % (p.solucao, tempo)
-
-    inicio=time()
-    p.solucao_contrutiva()
-    p.busca_tabu(1000)
-    fim=time()
-    tempo = fim - inicio
-    print "busca tabu: %s\t tempo: %s" % (p.solucao, tempo)
+    erro = p.solucao - otimo
+    print "solução: %s\t erro: %s\t tempo: %s" % (p.solucao, erro, tempo)
 
