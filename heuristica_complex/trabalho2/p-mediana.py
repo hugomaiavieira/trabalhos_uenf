@@ -143,7 +143,7 @@ class PMediana(object):
 
 if __name__ == '__main__':
     inicio=time()
-    p = PMediana('pmed6.txt')
+    p = PMediana('data/pmed6.txt')
     fim=time()
     tempo = fim - inicio
     print "Tempo para rodar o algoritmo de Floyd: %s" % tempo
